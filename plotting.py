@@ -16,6 +16,7 @@ plt.rcParams.update(
         "pgf.rcfonts": False,
     }
 )
+matplotlib.rcParams.update({"font.size": 20})
 
 
 def plot_single_interactive_map(data, title="", save_html=None):
@@ -40,10 +41,8 @@ def plot_single_interactive_map(data, title="", save_html=None):
         tiles="CartoDB positron",  # Light theme map
     )
 
-    # Create feature groups for different layers
     group = folium.FeatureGroup(name="Detections")
 
-    # Add markers and lines
     for _, match in data.iterrows():
         # marker (red)
         popup = f"""
@@ -65,7 +64,6 @@ def plot_single_interactive_map(data, title="", save_html=None):
 
     folium.LayerControl().add_to(m)
 
-    # Add a title
     title_html = f"""
         <div style="position: fixed;
                     top: 10px; left: 50px; width: 300px; z-index:9999;
@@ -75,7 +73,6 @@ def plot_single_interactive_map(data, title="", save_html=None):
     """
     m.get_root().html.add_child(folium.Element(title_html))
 
-    # Save if requested
     if save_html:
         m.save(save_html)
 
@@ -109,7 +106,6 @@ def plot_matches_interactive_map(matches_df, title="", show_lines=True, save_htm
     viirs_group = folium.FeatureGroup(name="VIIRS Detections")
     lines_group = folium.FeatureGroup(name="Matches")
 
-    # Add markers and lines
     for _, match in matches_df.iterrows():
         # MODIS marker (red)
         modis_popup = f"""
@@ -155,7 +151,6 @@ def plot_matches_interactive_map(matches_df, title="", show_lines=True, save_htm
                 opacity=0.5,
             ).add_to(lines_group)
 
-    # Add all layers to map
     modis_group.add_to(m)
     viirs_group.add_to(m)
     if show_lines:
@@ -163,7 +158,6 @@ def plot_matches_interactive_map(matches_df, title="", show_lines=True, save_htm
 
     folium.LayerControl().add_to(m)
 
-    # Add a title
     title_html = f"""
         <div style="position: fixed;
                     top: 10px; left: 50px; width: 300px; z-index:9999;
@@ -178,7 +172,6 @@ def plot_matches_interactive_map(matches_df, title="", show_lines=True, save_htm
     """
     m.get_root().html.add_child(folium.Element(title_html))
 
-    # Save if requested
     if save_html:
         m.save(save_html)
 
@@ -194,7 +187,6 @@ def _create_matches_map_for_screenshot(
         tiles="CartoDB positron",
     )
 
-    # Add markers and lines
     for _, match in matches_df.iterrows():
         # MODIS marker (red)
         folium.CircleMarker(
@@ -250,7 +242,6 @@ def _create_single_map_for_screenshot(data, center_coords, zoom_level=13):
         tiles="CartoDB positron",
     )
 
-    # Add markers and lines
     for _, detection in data.iterrows():
         # marker (red)
         folium.CircleMarker(
@@ -352,7 +343,6 @@ def plot_histogram(matches, dataset_name):
     # Add vertical line at 0
     plt.axvline(x=0, color="red", linestyle="--", alpha=0.5)
 
-    # Display the plot and save as PGF
     plt.tight_layout()
     plt.savefig(
         f'latex_plots/histogram_{dataset_name.lower().replace(" ", "_")}.pgf',
@@ -370,7 +360,6 @@ def plot_time_distance(matches, dataset_name):
     plt.xlabel("Distance between detections (km)")
     plt.ylabel("Time Difference (minutes)")
 
-    # display the plot and save as PGF
     plt.tight_layout()
     plt.savefig(
         f'latex_plots/time_distance_{dataset_name.lower().replace(" ", "_")}.pgf',
